@@ -1,6 +1,6 @@
-# Netflix Clone
+# CSE573 Movie Recommendation Platform
 
-A full-stack Netflix clone built with React (using Tailwind CSS) and Flask, featuring authentication, TMDB API integration, and watchlist functionality.
+A full-stack movie recommendation platform built with React (using Tailwind CSS) and Flask, featuring authentication, TMDB API integration, watchlist functionality, and movie recommendations.
 
 ## Features
 
@@ -8,7 +8,7 @@ A full-stack Netflix clone built with React (using Tailwind CSS) and Flask, feat
 - 🎬 **Movie Browsing**: Browse trending, popular, top-rated, now playing, and upcoming movies
 - 🔍 **Search**: Search for movies by title
 - ❤️ **Watchlist**: Add/remove movies to your personal watchlist
-- 🎨 **Netflix-like UI**: Beautiful, responsive UI built with Tailwind CSS
+- 🎨 **Modern UI**: Beautiful, responsive UI built with Tailwind CSS
 - 🎥 **Movie Details**: View detailed information about movies including cast, directors, genres, and trailers
 
 ## Tech Stack
@@ -239,5 +239,5 @@ This is a demonstration project for educational purposes.
 ## Credits
 
 - Movie data provided by [The Movie Database (TMDB)](https://www.themoviedb.org/)
-- Inspired by Netflix
+- Built for CSE573 Course Project
 

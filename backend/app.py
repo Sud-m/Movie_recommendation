@@ -36,7 +36,7 @@ app.register_blueprint(movies_bp)
 @app.route('/')
 def home():
     return jsonify({
-        "message": "Netflix Clone API",
+        "message": "CSE573 Movie Recommendation Platform API",
         "version": "1.0.0",
         "endpoints": {
             "auth": "/api/auth",

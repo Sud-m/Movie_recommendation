@@ -87,14 +87,14 @@ const Login = () => {
 
           <button
             type="submit"
-            className="px-4 py-4 bg-netflix-red text-white rounded text-base font-bold mt-6 hover:bg-netflix-red-dark transition-colors disabled:bg-red-900 disabled:cursor-not-allowed"
+            className="px-4 py-4 bg-netflix-red text-white rounded text-base font-bold mt-6 hover:bg-netflix-red-dark transition-colors disabled:bg-purple-900 disabled:cursor-not-allowed"
             disabled={loading}
           >
             {loading ? 'Loading...' : (isRegister ? 'Sign Up' : 'Sign In')}
           </button>
 
           <div className="text-neutral-500 mt-4 text-base">
-            {isRegister ? 'Already have an account?' : 'New to Netflix?'}
+            {isRegister ? 'Already have an account?' : 'New to CSE573 Movie Platform?'}
             <span
               className="text-white ml-2 cursor-pointer hover:underline"
               onClick={() => {
