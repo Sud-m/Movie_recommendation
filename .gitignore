@@ -6,8 +6,8 @@ __pycache__/
 venv/
 env/
 ENV/
-.venv
-*.log
-instance/
 .env
-
+.venv
+*.db
+*.sqlite3
+.DS_Store
