@@ -73,6 +73,7 @@ const Watchlist = () => {
             setSelectedMovie(null);
             fetchWatchlist(); // Refresh watchlist after modal closes
           }}
+          onMovieClick={(newMovieId) => setSelectedMovie(newMovieId)}
         />
       )}
     </div>

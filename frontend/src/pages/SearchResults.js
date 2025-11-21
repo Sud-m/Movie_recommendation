@@ -77,6 +77,7 @@ const SearchResults = () => {
         <MovieDetailModal
           movieId={selectedMovie}
           onClose={() => setSelectedMovie(null)}
+          onMovieClick={(newMovieId) => setSelectedMovie(newMovieId)}
         />
       )}
     </div>
