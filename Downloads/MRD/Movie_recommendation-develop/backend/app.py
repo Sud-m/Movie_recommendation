@@ -1,0 +1,69 @@
+from flask import Flask, jsonify
+from flask_cors import CORS
+from flask_jwt_extended import JWTManager
+from dotenv import load_dotenv
+import os
+
+# Load environment variables FIRST, before importing Config
+load_dotenv()
+
+from config import Config
+from models import db
+from auth import auth_bp
+from movies import movies_bp
+
+app = Flask(__name__)
+app.config.from_object(Config)
+
+# Initialize extensions
+# Allow multiple localhost ports for development
+CORS(app, 
+     origins=["http://localhost:3000", "http://localhost:4000", "http://127.0.0.1:3000", "http://127.0.0.1:4000"],
+     methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+     allow_headers=["Content-Type", "Authorization"],
+     expose_headers=["Content-Type", "Authorization"])
+db.init_app(app)
+jwt = JWTManager(app)
+
+# Register blueprints
+app.register_blueprint(auth_bp)
+app.register_blueprint(movies_bp)
+
+
+@app.route('/')
+def home():
+    return jsonify({
+        "message": "Netflix Clone API",
+        "version": "1.0.0",
+        "endpoints": {
+            "auth": "/api/auth",
+            "movies": "/api/movies"
+        }
+    })
+
+
+@app.route('/health')
+def health():
+    """Health check endpoint"""
+    try:
+        # Check database connection
+        db.session.execute(db.text('SELECT 1'))
+        db_status = "connected"
+    except Exception as e:
+        db_status = f"error: {str(e)}"
+    
+    return jsonify({
+        "status": "healthy",
+        "database": db_status
+    })
+
+
+# Create database tables (commented out after initial setup)
+# Uncomment this on first run to create tables, or use init_db.py
+# with app.app_context():
+#     db.create_all()
+#     print("Database tables created successfully!")
+
+
+if __name__ == '__main__':
+    app.run(debug=True, port=5000)
