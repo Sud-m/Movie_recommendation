@@ -3,6 +3,7 @@ from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from dotenv import load_dotenv
 import os
+import re
 
 from config import Config
 from models import db
@@ -17,11 +18,13 @@ app.config.from_object(Config)
 
 # Initialize extensions
 # Allow multiple localhost ports for development
+# Using regex pattern to allow any localhost/127.0.0.1 origin for easier development
 CORS(app, 
-     origins=["http://localhost:3000", "http://localhost:4000", "http://127.0.0.1:3000", "http://127.0.0.1:4000"],
+     origins=re.compile(r'https?://(localhost|127\.0\.0\.1)(:\d+)?$'),
      methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
      allow_headers=["Content-Type", "Authorization"],
-     expose_headers=["Content-Type", "Authorization"])
+     expose_headers=["Content-Type", "Authorization"],
+     supports_credentials=True)
 db.init_app(app)
 jwt = JWTManager(app)
 
@@ -33,7 +36,7 @@ app.register_blueprint(movies_bp)
 @app.route('/')
 def home():
     return jsonify({
-        "message": "Netflix Clone API",
+        "message": "CSE573 Movie Recommendation Platform API",
         "version": "1.0.0",
         "endpoints": {
             "auth": "/api/auth",

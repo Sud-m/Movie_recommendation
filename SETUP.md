@@ -1,6 +1,6 @@
 # Quick Setup Guide
 
-Follow these steps to get your Netflix Clone running locally.
+Follow these steps to get your CSE573 Movie Recommendation Platform running locally.
 
 ## Step 1: Install PostgreSQL
 

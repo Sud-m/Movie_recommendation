@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { moviesAPI, getImageUrl } from '../api';
 
-const MovieDetailModal = ({ movieId, onClose }) => {
+const MovieDetailModal = ({ movieId, onClose, onMovieClick }) => {
   const [movie, setMovie] = useState(null);
   const [inWatchlist, setInWatchlist] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [recommendedMovies, setRecommendedMovies] = useState([]);
+  const [loadingRecommendations, setLoadingRecommendations] = useState(true);
 
   useEffect(() => {
     const fetchMovie = async () => {
@@ -24,6 +26,39 @@ const MovieDetailModal = ({ movieId, onClose }) => {
     };
 
     fetchMovie();
+  }, [movieId]);
+
+  useEffect(() => {
+    const fetchRecommendations = async () => {
+      try {
+        setLoadingRecommendations(true);
+        // Fetch random movies from different categories
+        const [trendingRes, popularRes, topRatedRes] = await Promise.all([
+          moviesAPI.getTrending().catch(() => ({ data: { results: [] } })),
+          moviesAPI.getPopular().catch(() => ({ data: { results: [] } })),
+          moviesAPI.getTopRated().catch(() => ({ data: { results: [] } }))
+        ]);
+
+        // Combine all movies and filter out the current movie
+        const allMovies = [
+          ...(trendingRes.data.results || []),
+          ...(popularRes.data.results || []),
+          ...(topRatedRes.data.results || [])
+        ].filter(m => m.id !== movieId);
+
+        // Shuffle and get random 10 movies
+        const shuffled = allMovies.sort(() => 0.5 - Math.random());
+        setRecommendedMovies(shuffled.slice(0, 10));
+      } catch (error) {
+        console.error('Error fetching recommendations:', error);
+      } finally {
+        setLoadingRecommendations(false);
+      }
+    };
+
+    if (movieId) {
+      fetchRecommendations();
+    }
   }, [movieId]);
 
   const handleWatchlistToggle = async () => {
@@ -123,6 +158,51 @@ const MovieDetailModal = ({ movieId, onClose }) => {
               </p>
             )}
           </div>
+
+          {/* Recommended Movies Section */}
+          {recommendedMovies.length > 0 && (
+            <div className="mt-10 pt-10 border-t border-neutral-700">
+              <h2 className="text-2xl font-bold mb-6">More Like This</h2>
+              <div className="flex gap-3 overflow-x-auto pb-4 scrollbar-hide">
+                {recommendedMovies.map((recMovie) => (
+                  <div
+                    key={recMovie.id}
+                    className="flex-shrink-0 cursor-pointer group"
+                    onClick={() => {
+                      if (onMovieClick) {
+                        onMovieClick(recMovie.id);
+                      }
+                    }}
+                  >
+                    <div className="relative">
+                      <img
+                        className="w-[150px] h-[225px] object-cover rounded transition-transform group-hover:scale-110"
+                        src={getImageUrl(recMovie.poster_path || recMovie.backdrop_path, 'w300')}
+                        alt={recMovie.title || recMovie.name}
+                      />
+                      {/* Title overlay at bottom of card with hover highlight */}
+                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/70 to-transparent rounded-b px-2 py-2 transition-all group-hover:from-black group-hover:via-black/90">
+                        <p className="text-xs text-white font-medium text-center line-clamp-2 transition-all group-hover:text-sm group-hover:font-semibold group-hover:text-white group-hover:drop-shadow-lg">
+                          {recMovie.title || recMovie.name}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {loadingRecommendations && (
+            <div className="mt-10 pt-10 border-t border-neutral-700">
+              <h2 className="text-2xl font-bold mb-6">More Like This</h2>
+              <div className="flex gap-3">
+                {[...Array(5)].map((_, i) => (
+                  <div key={i} className="w-[150px] h-[225px] bg-neutral-800 rounded animate-pulse flex-shrink-0"></div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

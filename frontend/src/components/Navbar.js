@@ -29,8 +29,8 @@ const Navbar = () => {
       scrolled ? 'bg-netflix-black' : 'bg-gradient-to-b from-black/70 to-transparent'
     }`}>
       <div className="flex items-center gap-8">
-        <Link to="/" className="text-netflix-red text-3xl font-black tracking-wider">
-          NETFLIX
+        <Link to="/" className="text-netflix-red text-2xl font-bold tracking-wider">
+          CSE573 Movie Platform
         </Link>
         <div className="hidden md:flex gap-5">
           <Link to="/" className="text-gray-200 text-sm hover:text-gray-400 transition-colors">

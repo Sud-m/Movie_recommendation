@@ -45,13 +45,23 @@ const Watchlist = () => {
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
           {watchlist.map((item) => (
-            <img
+            <div
               key={item.id}
-              className="w-full h-[300px] object-cover rounded cursor-pointer transition-transform hover:scale-105"
-              src={getImageUrl(item.movie_poster, 'w500')}
-              alt={item.movie_title}
+              className="cursor-pointer group relative"
               onClick={() => setSelectedMovie(item.movie_id)}
-            />
+            >
+              <img
+                className="w-full h-[300px] object-cover rounded transition-transform group-hover:scale-105"
+                src={getImageUrl(item.movie_poster, 'w500')}
+                alt={item.movie_title}
+              />
+              {/* Title overlay at bottom of card with hover highlight */}
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/70 to-transparent rounded-b px-3 py-2 transition-all group-hover:from-black group-hover:via-black/90">
+                <p className="text-sm text-white font-medium text-center line-clamp-2 transition-all group-hover:text-base group-hover:font-semibold group-hover:text-white group-hover:drop-shadow-lg">
+                  {item.movie_title}
+                </p>
+              </div>
+            </div>
           ))}
         </div>
       )}
@@ -63,6 +73,7 @@ const Watchlist = () => {
             setSelectedMovie(null);
             fetchWatchlist(); // Refresh watchlist after modal closes
           }}
+          onMovieClick={(newMovieId) => setSelectedMovie(newMovieId)}
         />
       )}
     </div>
