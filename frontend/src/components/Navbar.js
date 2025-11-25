@@ -30,7 +30,7 @@ const Navbar = () => {
     }`}>
       <div className="flex items-center gap-8">
         <Link to="/" className="text-netflix-red text-2xl font-bold tracking-wider">
-          CSE573 Movie Platform
+          GRAFTER-Rec
         </Link>
         <div className="hidden md:flex gap-5">
           <Link to="/" className="text-gray-200 text-sm hover:text-gray-400 transition-colors">

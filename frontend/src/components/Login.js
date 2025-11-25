@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../AuthContext';
 
 const Login = () => {
+  // eslint-disable-next-line no-unused-vars
   const [isRegister, setIsRegister] = useState(false);
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
@@ -114,8 +115,8 @@ const Login = () => {
           </button>
 
           <div className="text-neutral-500 mt-4 text-base">
-            {isRegister ? 'Already have an account?' : 'New to CSE573 Movie Platform?'}
-            <span
+            {/* {isRegister ? 'Already have an account?' : 'New to CSE573 Movie Platform?'} */}
+            {/* <span
               className="text-white ml-2 cursor-pointer hover:underline"
               onClick={() => {
                 setIsRegister(!isRegister);
@@ -123,7 +124,7 @@ const Login = () => {
               }}
             >
               {isRegister ? 'Sign in now' : 'Sign up now'}
-            </span>
+            </span> */}
           </div>
         </form>
       </div>
