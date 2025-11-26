@@ -11,3 +11,5 @@ ENV/
 *.db
 *.sqlite3
 .DS_Store
+backend/ml_models/data/
+backend/ml_models/models/

@@ -81,6 +81,15 @@ export const moviesAPI = {
     api.delete(`/movies/watchlist/${movieId}`),
   checkInWatchlist: (movieId) =>
     api.get(`/movies/watchlist/check/${movieId}`),
+  getRecommendations: ({ mode = 'graph', limit = 10, demoUserId, movieId } = {}) =>
+    api.get('/recommendations', {
+      params: {
+        mode,
+        limit,
+        demo_user_id: demoUserId,
+        movie_id: movieId,
+      },
+    }),
 };
 
 // TMDB image helper

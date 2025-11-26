@@ -6,6 +6,7 @@ const MovieDetailModal = ({ movieId, onClose, onMovieClick }) => {
   const [inWatchlist, setInWatchlist] = useState(false);
   const [loading, setLoading] = useState(true);
   const [recommendedMovies, setRecommendedMovies] = useState([]);
+  const [recommendationMeta, setRecommendationMeta] = useState(null);
   const [loadingRecommendations, setLoadingRecommendations] = useState(true);
 
   useEffect(() => {
@@ -50,6 +51,10 @@ const MovieDetailModal = ({ movieId, onClose, onMovieClick }) => {
         setRecommendedMovies(shuffled.slice(0, 10));
       } catch (error) {
         console.error('Error fetching recommendations:', error);
+        setRecommendationMeta({
+          fallback: true,
+          fallbackReason: 'network_error',
+        });
       } finally {
         setLoadingRecommendations(false);
       }
@@ -163,6 +168,13 @@ const MovieDetailModal = ({ movieId, onClose, onMovieClick }) => {
           {recommendedMovies.length > 0 && (
             <div className="mt-10 pt-10 border-t border-neutral-700">
               <h2 className="text-2xl font-bold mb-6">More Like This</h2>
+              {recommendationMeta?.fallback && (
+                <p className="text-sm text-neutral-400 mb-4">
+                  {recommendationMeta?.fallbackReason === 'missing_history'
+                    ? 'Add a few movies to your watchlist to unlock personalized picks. Showing trending titles for now.'
+                    : 'Showing trending titles while recommendations warm up.'}
+                </p>
+              )}
               <div className="flex gap-3 overflow-x-auto pb-4 scrollbar-hide">
                 {recommendedMovies.map((recMovie) => (
                   <div

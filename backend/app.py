@@ -9,6 +9,7 @@ from config import Config
 from models import db
 from auth import auth_bp
 from movies import movies_bp
+from recommendations import recommendations_bp
 
 # Load environment variables
 load_dotenv()
@@ -31,6 +32,7 @@ jwt = JWTManager(app)
 # Register blueprints
 app.register_blueprint(auth_bp)
 app.register_blueprint(movies_bp)
+app.register_blueprint(recommendations_bp)
 
 
 @app.route('/')
