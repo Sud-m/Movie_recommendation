@@ -32,21 +32,20 @@ const MovieDetailModal = ({ movieId, onClose, onMovieClick }) => {
     const fetchRecommendations = async () => {
       try {
         setLoadingRecommendations(true);
-        // Fetch random movies from different categories
+        setRecommendedMovies([]); // 👈 clear old data immediately
+
         const [trendingRes, popularRes, topRatedRes] = await Promise.all([
           moviesAPI.getTrending().catch(() => ({ data: { results: [] } })),
           moviesAPI.getPopular().catch(() => ({ data: { results: [] } })),
           moviesAPI.getTopRated().catch(() => ({ data: { results: [] } }))
         ]);
 
-        // Combine all movies and filter out the current movie
         const allMovies = [
           ...(trendingRes.data.results || []),
           ...(popularRes.data.results || []),
           ...(topRatedRes.data.results || [])
         ].filter(m => m.id !== movieId);
 
-        // Shuffle and get random 10 movies
         const shuffled = allMovies.sort(() => 0.5 - Math.random());
         setRecommendedMovies(shuffled.slice(0, 10));
       } catch (error) {
@@ -60,6 +59,7 @@ const MovieDetailModal = ({ movieId, onClose, onMovieClick }) => {
       fetchRecommendations();
     }
   }, [movieId]);
+
 
   const handleWatchlistToggle = async () => {
     try {
@@ -174,15 +174,26 @@ const MovieDetailModal = ({ movieId, onClose, onMovieClick }) => {
                       }
                     }}
                   >
-                    <div className="relative">
+                    {/* Card container scales as a whole */}
+                    <div
+                      className="
+                        relative
+                        w-[150px] h-[225px]
+                        rounded-lg overflow-hidden
+                        shadow-lg
+                        transition-transform duration-300
+                        group-hover:scale-110
+                      "
+                    >
                       <img
-                        className="w-[150px] h-[225px] object-cover rounded transition-transform group-hover:scale-110"
+                        className="w-full h-full object-cover"
                         src={getImageUrl(recMovie.poster_path || recMovie.backdrop_path, 'w300')}
                         alt={recMovie.title || recMovie.name}
                       />
+
                       {/* Title overlay at bottom of card with hover highlight */}
-                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/70 to-transparent rounded-b px-2 py-2 transition-all group-hover:from-black group-hover:via-black/90">
-                        <p className="text-xs text-white font-medium text-center line-clamp-2 transition-all group-hover:text-sm group-hover:font-semibold group-hover:text-white group-hover:drop-shadow-lg">
+                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/70 to-transparent px-2 py-2 transition-all group-hover:from-black group-hover:via-black/90">
+                        <p className="text-md text-white font-medium text-center line-clamp-2 transition-all group-hover:text-sm group-hover:font-semibold group-hover:text-white group-hover:drop-shadow-lg">
                           {recMovie.title || recMovie.name}
                         </p>
                       </div>
@@ -192,6 +203,7 @@ const MovieDetailModal = ({ movieId, onClose, onMovieClick }) => {
               </div>
             </div>
           )}
+
 
           {loadingRecommendations && (
             <div className="mt-10 pt-10 border-t border-neutral-700">

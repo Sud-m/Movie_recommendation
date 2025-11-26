@@ -33,10 +33,10 @@ const Navbar = () => {
           GRAFTER-Rec
         </Link>
         <div className="hidden md:flex gap-5">
-          <Link to="/" className="text-gray-200 text-sm hover:text-gray-400 transition-colors">
+          <Link to="/" className="text-gray-200 font-bold text-md hover:text-gray-400 transition-colors">
             Home
           </Link>
-          <Link to="/watchlist" className="text-gray-200 text-sm hover:text-gray-400 transition-colors">
+          <Link to="/watchlist" className="text-gray-200 font-bold text-md hover:text-gray-400 transition-colors">
             My List
           </Link>
         </div>
@@ -54,12 +54,12 @@ const Navbar = () => {
         </form>
 
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded bg-netflix-red flex items-center justify-center font-bold">
+          <div className="w-8 h-8 rounded text-black bg-netflix-red flex items-center justify-center font-bold">
             {user?.username?.charAt(0).toUpperCase() || 'U'}
           </div>
           <button 
             onClick={logout} 
-            className="px-4 py-2 bg-netflix-red text-white rounded text-sm hover:bg-netflix-red-dark transition-colors"
+            className="px-4 py-2 bg-netflix-red text-black font-bold rounded text-sm hover:bg-netflix-red-dark transition-colors"
           >
             Sign Out
           </button>

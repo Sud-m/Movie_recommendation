@@ -7,8 +7,8 @@ module.exports = {
     extend: {
       colors: {
         netflix: {
-          red: '#9333EA', // Purple primary
-          'red-dark': '#7C3AED', // Purple dark (darker shade)
+          red: '#D4A017', // Cinematic Gold
+          'red-dark': '#8C6A12', // Deep Gold (darker shade)
           black: '#141414',
           'gray-dark': '#181818',
           'gray-medium': '#2F2F2F',

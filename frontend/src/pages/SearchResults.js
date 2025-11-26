@@ -54,19 +54,32 @@ const SearchResults = () => {
           {results.map((movie) => (
             <div
               key={movie.id}
-              className="cursor-pointer group relative"
+              className="cursor-pointer group"
               onClick={() => setSelectedMovie(movie.id)}
             >
-              <img
-                className="w-full h-[300px] object-cover rounded transition-transform group-hover:scale-105"
-                src={getImageUrl(movie.poster_path, 'w500')}
-                alt={movie.title}
-              />
-              {/* Title overlay at bottom of card with hover highlight */}
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/70 to-transparent rounded-b px-3 py-2 transition-all group-hover:from-black group-hover:via-black/90">
-                <p className="text-sm text-white font-medium text-center line-clamp-2 transition-all group-hover:text-base group-hover:font-semibold group-hover:text-white group-hover:drop-shadow-lg">
-                  {movie.title || movie.name}
-                </p>
+              {/* Card container should scale, not the image */}
+              <div
+                className="
+                  relative
+                  w-full h-[300px]
+                  rounded-lg overflow-hidden
+                  shadow-lg
+                  transition-transform duration-300
+                  group-hover:scale-105
+                "
+              >
+                <img
+                  className="w-full h-full object-cover"
+                  src={getImageUrl(movie.poster_path, 'w500')}
+                  alt={movie.title || movie.name}
+                />
+
+                {/* Title overlay scales visually because container scales */}
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/70 to-transparent px-3 py-2 transition-all group-hover:from-black group-hover:via-black/90">
+                  <p className="text-md text-white font-medium text-center line-clamp-2 transition-all group-hover:text-base group-hover:font-semibold group-hover:text-white group-hover:drop-shadow-lg">
+                    {movie.title || movie.name}
+                  </p>
+                </div>
               </div>
             </div>
           ))}

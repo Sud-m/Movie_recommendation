@@ -108,7 +108,7 @@ const Login = () => {
 
           <button
             type="submit"
-            className="px-4 py-4 bg-netflix-red text-white rounded text-base font-bold mt-6 hover:bg-netflix-red-dark transition-colors disabled:bg-purple-900 disabled:cursor-not-allowed"
+            className="px-4 py-4 bg-netflix-red text-white rounded text-base font-bold mt-6 hover:bg-netflix-red-dark transition-colors disabled:bg-yellow-900 disabled:cursor-not-allowed"
             disabled={loading}
           >
             {loading ? 'Loading...' : (isRegister ? 'Sign Up' : 'Sign In')}

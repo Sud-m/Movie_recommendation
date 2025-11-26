@@ -1,7 +1,9 @@
+// src/pages/Browse.js
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import MovieRow from '../components/MovieRow';
 import MovieDetailModal from '../components/MovieDetailModal';
+import CinematchModal from '../components/CinematchModal'; // 👈 NEW
 import { moviesAPI, getImageUrl } from '../api';
 
 const Browse = () => {
@@ -14,17 +16,25 @@ const Browse = () => {
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // 👇 NEW: cinematch modal state
+  const [showCinematch, setShowCinematch] = useState(false);
+
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const [trendingRes, topRatedRes, popularRes, nowPlayingRes, upcomingRes] = 
-          await Promise.all([
-            moviesAPI.getTrending(),
-            moviesAPI.getTopRated(),
-            moviesAPI.getPopular(),
-            moviesAPI.getNowPlaying(),
-            moviesAPI.getUpcoming(),
-          ]);
+        const [
+          trendingRes,
+          topRatedRes,
+          popularRes,
+          nowPlayingRes,
+          upcomingRes,
+        ] = await Promise.all([
+          moviesAPI.getTrending(),
+          moviesAPI.getTopRated(),
+          moviesAPI.getPopular(),
+          moviesAPI.getNowPlaying(),
+          moviesAPI.getUpcoming(),
+        ]);
 
         const trendingData = trendingRes.data.results || [];
         setTrending(trendingData);
@@ -35,7 +45,8 @@ const Browse = () => {
 
         // Set random featured movie from trending
         if (trendingData.length > 0) {
-          const randomMovie = trendingData[Math.floor(Math.random() * trendingData.length)];
+          const randomMovie =
+            trendingData[Math.floor(Math.random() * trendingData.length)];
           setFeaturedMovie(randomMovie);
         }
       } catch (error) {
@@ -60,6 +71,15 @@ const Browse = () => {
     );
   }
 
+  // All movies we’ll feed into cinematch
+  const cinematchMovies = [
+    ...trending,
+    ...popular,
+    ...topRated,
+    ...nowPlaying,
+    ...upcoming,
+  ].filter((m) => m && (m.poster_path || m.backdrop_path));
+
   return (
     <div className="pt-[70px]">
       <Navbar />
@@ -69,7 +89,10 @@ const Browse = () => {
         <div
           className="h-[80vh] bg-cover bg-center relative flex items-center px-[4%]"
           style={{
-            backgroundImage: `linear-gradient(to right, rgba(0,0,0,0.8) 0%, transparent 100%), url(${getImageUrl(featuredMovie.backdrop_path, 'original')})`,
+            backgroundImage: `linear-gradient(to right, rgba(0,0,0,0.8) 0%, transparent 100%), url(${getImageUrl(
+              featuredMovie.backdrop_path,
+              'original'
+            )})`,
           }}
         >
           <div className="relative z-10 max-w-[500px]">
@@ -125,6 +148,21 @@ const Browse = () => {
         isLarge={false}
         onMovieClick={(movie) => setSelectedMovie(movie.id)}
       />
+
+      {/* Cinematch - Swipe Game - Future Feature */}
+      <div className="my-10 px-[4%]">
+        <button
+          onClick={() => setShowCinematch(true)}
+          className="bg-netflix-red mx-auto italic text-black font-bold px-6 py-3 rounded-lg shadow-md hover:opacity-90 active:scale-95 transition-all flex items-center gap-2"
+        >
+          Cinematch 🎥
+        </button>
+      </div>
+
+      {/* Cinematch Modal */}
+      {showCinematch && cinematchMovies.length > 0 && (
+        <CinematchModal movies={cinematchMovies} onClose={() => setShowCinematch(false)} />
+      )}
 
       {/* Movie Detail Modal */}
       {selectedMovie && (
