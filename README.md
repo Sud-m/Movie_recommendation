@@ -381,8 +381,6 @@ Key contributions:
 2. Large-scale movie knowledge graph with dynamic TMDb integration
 3. State-of-the-art performance with path-faithful explanations
 
-For technical details, see `docs/SWM_Movie_RecSys_G18.pdf`
-
 ## License
 
 This is an academic research project for educational purposes.
