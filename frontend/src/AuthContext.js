@@ -14,8 +14,10 @@ export const AuthProvider = ({ children }) => {
         .then(res => {
           setUser(res.data.user);
         })
-        .catch(() => {
+        .catch((error) => {
+          // Token is invalid/expired, clean it up silently
           localStorage.removeItem('token');
+          setUser(null);
         })
         .finally(() => {
           setLoading(false);

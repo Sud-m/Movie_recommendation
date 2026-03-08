@@ -1,10 +1,14 @@
 import React from 'react';
 import { getImageUrl } from '../api';
 
-const MovieRow = ({ title, movies, isLarge, onMovieClick }) => {
+const MovieRow = ({ title, subtitle, movies, isLarge, onMovieClick }) => {
   return (
     <div className="my-10 px-[4%]">
-      <h2 className="text-3xl font-bold mb-4">{title}</h2>
+      <h2 className="text-3xl font-bold mb-1">{title}</h2>
+      {subtitle && (
+        <p className="text-sm text-neutral-400 mb-4">{subtitle}</p>
+      )}
+      {!subtitle && <div className="mb-3"></div>}
       <div className="flex gap-2 overflow-x-scroll overflow-y-hidden py-5 scrollbar-hide">
         {movies.map((movie) => (
           <div

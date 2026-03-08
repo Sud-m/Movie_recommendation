@@ -31,8 +31,8 @@ def register():
         db.session.add(user)
         db.session.commit()
         
-        # Create access token
-        access_token = create_access_token(identity=user.id)
+        # Create access token (identity must be a string for PyJWT >= 2)
+        access_token = create_access_token(identity=str(user.id))
         
         return jsonify({
             'message': 'User created successfully',
@@ -66,8 +66,8 @@ def login():
         if not user or not user.check_password(password):
             return jsonify({'error': 'Invalid email or password'}), 401
         
-        # Create access token
-        access_token = create_access_token(identity=user.id)
+        # Create access token (identity must be a string for PyJWT >= 2)
+        access_token = create_access_token(identity=str(user.id))
         
         return jsonify({
             'message': 'Login successful',
@@ -84,7 +84,8 @@ def login():
 def get_current_user():
     """Get current user information"""
     try:
-        user_id = get_jwt_identity()
+        # Stored identity is a string; cast to int for DB lookup
+        user_id = int(get_jwt_identity())
         user = User.query.get(user_id)
         
         if not user:

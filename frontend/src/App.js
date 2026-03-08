@@ -10,6 +10,7 @@ import Login from "./components/Login";
 import Browse from "./pages/Browse";
 import Watchlist from "./pages/Watchlist";
 import SearchResults from "./pages/SearchResults";
+import Demo from "./pages/Demo";
 import "./App.css";
 
 const PrivateRoute = ({ children }) => {
@@ -33,6 +34,7 @@ function App() {
         <div className="min-h-screen bg-netflix-black text-white">
           <Routes>
             <Route path="/login" element={<Login />} />
+            <Route path="/demo" element={<Demo />} />
             <Route
               path="/"
               element={

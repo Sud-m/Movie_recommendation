@@ -10,6 +10,7 @@ from models import db
 from auth import auth_bp
 from movies import movies_bp
 from recommendations import recommendations_bp
+from demo import demo_bp
 
 # Load environment variables
 load_dotenv()
@@ -21,7 +22,15 @@ app.config.from_object(Config)
 # Allow multiple localhost ports for development
 # Using regex pattern to allow any localhost/127.0.0.1 origin for easier development
 CORS(app, 
-     origins=re.compile(r'https?://(localhost|127\.0\.0\.1)(:\d+)?$'),
+     origins=[
+         re.compile(r'https?://(localhost|127\.0\.0\.1)(:\d+)?$'),
+         'http://localhost:3000',
+         'http://localhost:3001',
+         'http://localhost:3002',
+         'http://127.0.0.1:3000',
+         'http://127.0.0.1:3001',
+         'http://127.0.0.1:3002'
+     ],
      methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
      allow_headers=["Content-Type", "Authorization"],
      expose_headers=["Content-Type", "Authorization"],
@@ -33,6 +42,7 @@ jwt = JWTManager(app)
 app.register_blueprint(auth_bp)
 app.register_blueprint(movies_bp)
 app.register_blueprint(recommendations_bp)
+app.register_blueprint(demo_bp)
 
 
 @app.route('/')
@@ -71,4 +81,4 @@ def health():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=8000)

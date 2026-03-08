@@ -39,6 +39,9 @@ const Navbar = () => {
           <Link to="/watchlist" className="text-gray-200 font-bold text-md hover:text-gray-400 transition-colors">
             My List
           </Link>
+          <Link to="/demo" className="text-yellow-400 text-sm hover:text-yellow-300 transition-colors font-semibold">
+            🎬 Live Demo
+          </Link>
         </div>
       </div>
 

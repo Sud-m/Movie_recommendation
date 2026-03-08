@@ -6,6 +6,22 @@ import MovieDetailModal from '../components/MovieDetailModal';
 import CinematchModal from '../components/CinematchModal'; // 👈 NEW
 import { moviesAPI, getImageUrl } from '../api';
 
+// Hardcoded Hidden Gems - Critically acclaimed but lesser-known films
+const HIDDEN_GEMS = [
+  { id: 769, title: "GoodFellas", poster_path: "/aKuFiU82s5ISJpGZp7YkIr3kCUd.jpg", backdrop_path: "/sw7mordbZxgITU877yTpZCud90M.jpg", vote_average: 8.5 },
+  { id: 11216, title: "Cinema Paradiso", poster_path: "/8SRUfRUi6x4O68n0VCbDNRa6iGL.jpg", backdrop_path: "/gCI2AeMV4IHSewhJkzsur5MEp6R.jpg", vote_average: 8.4 },
+  { id: 194, title: "Amélie", poster_path: "/wnUAcUrMRGPPZUDroLeZhSjLkuu.jpg", backdrop_path: "/1IlPZkVD4zcLU8ZxJOHl0DzdZIa.jpg", vote_average: 8.3 },
+  { id: 641, title: "Requiem for a Dream", poster_path: "/nOd6vjEmzCT0k4VYqsA2hwyi87C.jpg", backdrop_path: "/dE0SJBnR0XJNA8HhL3hlTIrZ85x.jpg", vote_average: 8.0 },
+  { id: 62, title: "2001: A Space Odyssey", poster_path: "/ve72VxNqjGM69Uky4WTo2bK6rfq.jpg", backdrop_path: "/zmmYdPa8Lxx999Af9vnVP4NfqTd.jpg", vote_average: 8.1 },
+  { id: 1422, title: "The Departed", poster_path: "/nT97ifVT2J1yMQmeq20Qblg61T.jpg", backdrop_path: "/4dOmT1IcNLaWUOEqkCTmNxqNpkb.jpg", vote_average: 8.2 },
+  { id: 1124, title: "The Prestige", poster_path: "/bdN3gXuIZYaJP7ftKK2sU0nPtEA.jpg", backdrop_path: "/c6FfUxzYMEPxJmFVNrjzRAy0Rh1.jpg", vote_average: 8.2 },
+  { id: 4935, title: "Howl's Moving Castle", poster_path: "/TkTPELv4kC3u1lkloush8skOjE.jpg", backdrop_path: "/lsdj4S4fetqTXH1gXb3F7QVQZSE.jpg", vote_average: 8.4 },
+  { id: 129, title: "Spirited Away", poster_path: "/39wmItIWsg5sZMyRUHLkWBcuVCM.jpg", backdrop_path: "/mSDsSDwaP3E7dEfUPWy4J0djt4O.jpg", vote_average: 8.5 },
+  { id: 372058, title: "Your Name", poster_path: "/q719jXXEzOoYaps6babgKnONONX.jpg", backdrop_path: "/dIWwZW7dJJtqC6CgWzYkNVKIUm8.jpg", vote_average: 8.5 },
+  { id: 4638, title: "Hot Fuzz", poster_path: "/zPib4ukTSdXvHP9pxGkFCe34oz3.jpg", backdrop_path: "/xHEqM7fTuQJokNzGvIGJNOyL7WU.jpg", vote_average: 7.8 },
+  { id: 862, title: "Toy Story", poster_path: "/uXDfjJbdP4ijW5hWSBrPrlKpxab.jpg", backdrop_path: "/43PnQR5jjbXNj8Y8R1Fy0Cj5avZ.jpg", vote_average: 8.0 },
+];
+
 const Browse = () => {
   const [featuredMovie, setFeaturedMovie] = useState(null);
   const [trending, setTrending] = useState([]);
@@ -118,6 +134,19 @@ const Browse = () => {
       )}
 
       {/* Movie Rows */}
+      
+      {/* Hidden Gems Section - Above Trending (Hardcoded curated list) */}
+      <div className="mt-5 relative z-20">
+        <MovieRow
+          title="Hidden Gems 💎"
+          subtitle="Critically acclaimed classics & under-the-radar masterpieces"
+          movies={HIDDEN_GEMS}
+          isLarge={true}
+          onMovieClick={(movie) => setSelectedMovie(movie.id)}
+        />
+      </div>
+    
+
       <MovieRow
         title="Trending Now"
         movies={trending}

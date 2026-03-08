@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { moviesAPI, getImageUrl } from '../api';
+import { useAuth } from '../AuthContext';
 
-const MovieDetailModal = ({ movieId, onClose, onMovieClick }) => {
+// onAddedToList/onRemovedFromList are optional callbacks for parent to refresh data immediately
+const MovieDetailModal = ({ movieId, onClose, onMovieClick, onAddedToList, onRemovedFromList }) => {
+  const { user } = useAuth();
   const [movie, setMovie] = useState(null);
   const [inWatchlist, setInWatchlist] = useState(false);
   const [loading, setLoading] = useState(true);
   const [recommendedMovies, setRecommendedMovies] = useState([]);
   const [recommendationMeta, setRecommendationMeta] = useState(null);
   const [loadingRecommendations, setLoadingRecommendations] = useState(true);
+  const [watchlistLoading, setWatchlistLoading] = useState(false);
+  const [watchlistError, setWatchlistError] = useState(null);
 
   useEffect(() => {
     const fetchMovie = async () => {
@@ -67,16 +72,52 @@ const MovieDetailModal = ({ movieId, onClose, onMovieClick }) => {
 
 
   const handleWatchlistToggle = async () => {
+    // Check if user is logged in
+    if (!user) {
+      setWatchlistError('Please log in to add movies to your list');
+      setTimeout(() => setWatchlistError(null), 3000);
+      return;
+    }
+
+    setWatchlistLoading(true);
+    setWatchlistError(null);
+    
     try {
       if (inWatchlist) {
         await moviesAPI.removeFromWatchlist(movieId);
         setInWatchlist(false);
+        if (onRemovedFromList) {
+          onRemovedFromList(movieId);
+        }
       } else {
-        await moviesAPI.addToWatchlist(movie);
+        const res = await moviesAPI.addToWatchlist(movie);
         setInWatchlist(true);
+        if (onAddedToList) {
+          const createdItem = res?.data?.item || {
+            // Fallback construction if backend doesn't return the item
+            id: Date.now(),
+            movie_id: movie?.id,
+            movie_title: movie?.title,
+            movie_poster: movie?.poster_path,
+            movie_backdrop: movie?.backdrop_path,
+            added_at: new Date().toISOString(),
+          };
+          onAddedToList(createdItem);
+        }
       }
     } catch (error) {
       console.error('Error updating watchlist:', error);
+      if (error.response?.status === 401 || error.response?.status === 422) {
+        setWatchlistError('Please log in to add movies to your list');
+      } else if (error.response?.status === 409) {
+        setWatchlistError('Movie already in your list');
+        setInWatchlist(true);
+      } else {
+        setWatchlistError('Failed to update list. Try again.');
+      }
+      setTimeout(() => setWatchlistError(null), 3000);
+    } finally {
+      setWatchlistLoading(false);
     }
   };
 
@@ -123,16 +164,26 @@ const MovieDetailModal = ({ movieId, onClose, onMovieClick }) => {
             <span>{movie.runtime} min</span>
           </div>
 
-          <div className="flex gap-3 mb-6">
-            <button className="px-6 py-3 bg-white text-black rounded text-base font-semibold flex items-center gap-2 hover:bg-white/75 transition-colors">
-              ▶ Play
-            </button>
-            <button
-              className="px-6 py-3 bg-neutral-600/70 text-white rounded text-base font-semibold flex items-center gap-2 hover:bg-neutral-600/40 transition-colors"
-              onClick={handleWatchlistToggle}
-            >
-              {inWatchlist ? '✓ In My List' : '+ Add to List'}
-            </button>
+          <div className="flex flex-col gap-2 mb-6">
+            <div className="flex gap-3">
+              <button className="px-6 py-3 bg-white text-black rounded text-base font-semibold flex items-center gap-2 hover:bg-white/75 transition-colors">
+                ▶ Play
+              </button>
+              <button
+                className={`px-6 py-3 rounded text-base font-semibold flex items-center gap-2 transition-colors ${
+                  inWatchlist 
+                    ? 'bg-green-600/70 text-white hover:bg-green-600/50' 
+                    : 'bg-neutral-600/70 text-white hover:bg-neutral-600/40'
+                } ${watchlistLoading ? 'opacity-50 cursor-wait' : ''}`}
+                onClick={handleWatchlistToggle}
+                disabled={watchlistLoading}
+              >
+                {watchlistLoading ? '...' : inWatchlist ? '✓ In My List' : '+ Add to List'}
+              </button>
+            </div>
+            {watchlistError && (
+              <p className="text-red-400 text-sm">{watchlistError}</p>
+            )}
           </div>
 
           <p className="text-lg leading-relaxed mb-6">{movie.overview}</p>

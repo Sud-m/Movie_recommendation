@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://127.0.0.1:5000/api';
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://127.0.0.1:8000/api';
 
 // Create axios instance
 const api = axios.create({
@@ -24,8 +24,11 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response) {
-      // Server responded with error
+      // Don't log auth errors (401/422) as they're expected for unauthenticated requests
+      const status = error.response.status;
+      if (status !== 401 && status !== 422) {
       console.error('API Error:', error.response.data);
+      }
     } else if (error.request) {
       // Request made but no response (likely CORS or network issue)
       console.error('Network Error:', error.message);

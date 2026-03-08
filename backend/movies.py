@@ -113,7 +113,7 @@ def search_movies():
 def get_watchlist():
     """Get user's watchlist"""
     try:
-        user_id = get_jwt_identity()
+        user_id = int(get_jwt_identity())
         watchlist = Watchlist.query.filter_by(user_id=user_id).order_by(Watchlist.added_at.desc()).all()
         
         return jsonify({
@@ -129,7 +129,7 @@ def get_watchlist():
 def add_to_watchlist():
     """Add movie to watchlist"""
     try:
-        user_id = get_jwt_identity()
+        user_id = int(get_jwt_identity())
         data = request.get_json()
         
         if not data or 'movie_id' not in data:
@@ -165,7 +165,7 @@ def add_to_watchlist():
 def remove_from_watchlist(movie_id):
     """Remove movie from watchlist"""
     try:
-        user_id = get_jwt_identity()
+        user_id = int(get_jwt_identity())
         
         watchlist_item = Watchlist.query.filter_by(
             user_id=user_id,
@@ -190,7 +190,7 @@ def remove_from_watchlist(movie_id):
 def check_in_watchlist(movie_id):
     """Check if movie is in user's watchlist"""
     try:
-        user_id = get_jwt_identity()
+        user_id = int(get_jwt_identity())
         
         exists = Watchlist.query.filter_by(
             user_id=user_id,
