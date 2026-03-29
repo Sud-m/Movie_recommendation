@@ -1,0 +1,16 @@
+{
+  "num_nodes": 31788,
+  "num_edges": 301027,
+  "node_types": {
+    "movie": 18342,
+    "genre": 19,
+    "decade": 13,
+    "tag": 13414
+  },
+  "edge_types": {
+    "HAS_GENRE": 38356,
+    "RELEASED_IN": 18338,
+    "HAS_TAG": 60149,
+    "SIMILAR_TO": 184184
+  }
+}

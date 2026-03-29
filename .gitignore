@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+.env
+.venv
+*.db
+*.sqlite3
+.DS_Store
+backend/ml_models/data/
+backend/ml_models/models/

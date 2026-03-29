@@ -1,11 +1,13 @@
 {
-  "name": "frontend",
+  "name": "netflix-clone-frontend",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-scripts": "5.0.1"
+    "react-scripts": "5.0.1",
+    "react-router-dom": "^6.20.0",
+    "axios": "^1.6.2"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -29,6 +31,11 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.16",
+    "postcss": "^8.4.32",
+    "tailwindcss": "^3.3.6"
+  },
+  "proxy": "http://localhost:5000"
 }
-

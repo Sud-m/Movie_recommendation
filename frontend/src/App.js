@@ -1,44 +1,69 @@
-import React, { useState, useEffect } from 'react';
-import './App.css';
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import { AuthProvider, useAuth } from "./AuthContext";
+import Login from "./components/Login";
+import Browse from "./pages/Browse";
+import Watchlist from "./pages/Watchlist";
+import SearchResults from "./pages/SearchResults";
+import Demo from "./pages/Demo";
+import "./App.css";
+
+const PrivateRoute = ({ children }) => {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-netflix-black flex items-center justify-center">
+        <div className="w-12 h-12 border-4 border-netflix-red border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  return user ? children : <Navigate to="/login" />;
+};
 
 function App() {
-  const [message, setMessage] = useState('');
-  const [data, setData] = useState('');
-
-  // useEffect(() => {
-  //   // Fetch from backend on component mount
-  //   fetch('http://localhost:5000/')
-  //     .then(res => res.json())
-  //     .then(data => setMessage(data.message))
-  //     .catch(err => console.error('Error:', err));
-  // }, []);
-
-  // const fetchData = () => {
-  //   fetch('http://localhost:5000/api/data')
-  //     .then(res => res.json())
-  //     .then(data => setData(data.data))
-  //     .catch(err => console.error('Error:', err));
-  // };
-
-  // const sendData = () => {
-  //   fetch('http://localhost:5000/api/data', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify({ test: 'Hello from React!' }),
-  //   })
-  //     .then(res => res.json())
-  //     .then(data => console.log('Response:', data))
-  //     .catch(err => console.error('Error:', err));
-  // };
-
   return (
-    <div>
-      <h1>Hello World</h1>
-    </div>
+    <AuthProvider>
+        <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+        <div className="min-h-screen bg-netflix-black text-white">
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/demo" element={<Demo />} />
+            <Route
+              path="/"
+              element={
+                <PrivateRoute>
+                  <Browse />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/watchlist"
+              element={
+                <PrivateRoute>
+                  <Watchlist />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/search"
+              element={
+                <PrivateRoute>
+                  <SearchResults />
+                </PrivateRoute>
+              }
+            />
+          </Routes>
+        </div>
+      </Router>
+    </AuthProvider>
   );
 }
 
 export default App;
-

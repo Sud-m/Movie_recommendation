@@ -1,0 +1,100 @@
+import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import Navbar from '../components/Navbar';
+import MovieDetailModal from '../components/MovieDetailModal';
+import { moviesAPI, getImageUrl } from '../api';
+
+const SearchResults = () => {
+  const [searchParams] = useSearchParams();
+  const query = searchParams.get('q');
+  const [results, setResults] = useState([]);
+  const [selectedMovie, setSelectedMovie] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchResults = async () => {
+      if (!query) return;
+
+      setLoading(true);
+      try {
+        const res = await moviesAPI.searchMovies(query);
+        setResults(res.data.results || []);
+      } catch (error) {
+        console.error('Error searching movies:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchResults();
+  }, [query]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-netflix-black flex items-center justify-center">
+        <div className="w-12 h-12 border-4 border-neutral-800 border-t-netflix-red rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen pt-[100px] px-[4%]">
+      <Navbar />
+      
+      <h1 className="text-4xl font-bold mb-8">
+        Search Results for "{query}"
+      </h1>
+
+      {results.length === 0 ? (
+        <div className="text-center py-16 text-neutral-500 text-lg">
+          <p>No results found for "{query}"</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+          {results.map((movie) => (
+            <div
+              key={movie.id}
+              className="cursor-pointer group"
+              onClick={() => setSelectedMovie(movie.id)}
+            >
+              {/* Card container should scale, not the image */}
+              <div
+                className="
+                  relative
+                  w-full h-[300px]
+                  rounded-lg overflow-hidden
+                  shadow-lg
+                  transition-transform duration-300
+                  group-hover:scale-105
+                "
+              >
+                <img
+                  className="w-full h-full object-cover"
+                  src={getImageUrl(movie.poster_path, 'w500')}
+                  alt={movie.title || movie.name}
+                />
+
+                {/* Title overlay scales visually because container scales */}
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/70 to-transparent px-3 py-2 transition-all group-hover:from-black group-hover:via-black/90">
+                  <p className="text-md text-white font-medium text-center line-clamp-2 transition-all group-hover:text-base group-hover:font-semibold group-hover:text-white group-hover:drop-shadow-lg">
+                    {movie.title || movie.name}
+                  </p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {selectedMovie && (
+        <MovieDetailModal
+          movieId={selectedMovie}
+          onClose={() => setSelectedMovie(null)}
+          onMovieClick={(newMovieId) => setSelectedMovie(newMovieId)}
+        />
+      )}
+    </div>
+  );
+};
+
+export default SearchResults;
